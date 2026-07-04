@@ -1,0 +1,20 @@
+# Helm packaging output
+dist/
+*.tgz
+*.prov
+
+# Helm dependency archives
+charts/*/charts/
+
+# Local environment files
+.env
+.env.*
+!.env.example
+
+# Editor and OS files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
