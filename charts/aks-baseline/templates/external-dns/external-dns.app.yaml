@@ -43,16 +43,16 @@ spec:
             - {{ .Values.baseDomain | quote}}
           serviceAccount:
             annotations:
-              azure.workload.identity/client-id: {{ .Values.apps.certManager.azure.workloadIdentityClientID | quote }}
+              azure.workload.identity/client-id: {{ .Values.apps.externalDNS.azure.workloadIdentityClientID | quote }}
           secretConfiguration:
             enabled: true
             data:
               azure.json: |
                 {
                   "subscriptionId": {{ .Values.azure.subscriptionID | quote}},
-                  "resourceGroup": {{ .Values.apps.certManager.azure.dnsZoneResourceGroup | quote }},
+                  "resourceGroup": {{ .Values.apps.externalDNS.azure.dnsZoneResourceGroup | quote }},
                   "useWorkloadIdentityExtension":true
                 }
             mountPath: /etc/kubernetes
           extraArgs:
-            - --azure-resource-group={{ .Values.apps.certManager.azure.dnsZoneResourceGroup }}
+            - --azure-resource-group={{ .Values.apps.externalDNS.azure.dnsZoneResourceGroup }}

@@ -8,7 +8,7 @@ metadata:
     {{- include "aks-baseline.labels" . | nindent 4 }}
 spec:
   acme:
-    email: ecklm94@gmail.com
+    email: {{ .Values.apps.certManager.letsencryptContactEmail | quote }}
     server: https://acme-v02.api.letsencrypt.org/directory
     privateKeySecretRef:
       name: letsencrypt-account-key

@@ -9,16 +9,19 @@ tests:
       - failedTemplate:
           errorPattern: "/azure/subscriptionID.*minLength"
       - failedTemplate:
-          errorPattern: "/apps/certManager/azure/dnsZoneResourceGroup.*minLength"
+          errorPattern: "/apps/certManager/letsencryptContactEmail.*minLength"
       - failedTemplate:
-          errorPattern: "/apps/certManager/azure/workloadIdentityClientID.*minLength"
+          errorPattern: "/apps/externalDNS/azure/dnsZoneResourceGroup.*minLength"
+      - failedTemplate:
+          errorPattern: "/apps/externalDNS/azure/workloadIdentityClientID.*minLength"
 
   - it: renders when all mandatory values are provided
     set:
       baseDomain: example.com
       azure.subscriptionID: sub-0000
-      apps.certManager.azure.workloadIdentityClientID: client-0000
-      apps.certManager.azure.dnsZoneResourceGroup: dns-rg
+      apps.certManager.letsencryptContactEmail: ops@example.com
+      apps.externalDNS.azure.workloadIdentityClientID: client-0000
+      apps.externalDNS.azure.dnsZoneResourceGroup: dns-rg
     asserts:
       - notFailedTemplate: {}
       - equal:

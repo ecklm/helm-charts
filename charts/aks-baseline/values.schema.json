@@ -29,10 +29,24 @@
       "type": "object",
       "additionalProperties": false,
       "required": [
-        "certManager"
+        "certManager",
+        "externalDNS"
       ],
       "properties": {
         "certManager": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "letsencryptContactEmail"
+          ],
+          "properties": {
+            "letsencryptContactEmail": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "externalDNS": {
           "type": "object",
           "additionalProperties": false,
           "required": [
