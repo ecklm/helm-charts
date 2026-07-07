@@ -1,0 +1,12 @@
+baseDomain: ""
+
+azure:
+  subscriptionID: ""
+
+apps:
+  certManager:
+    azure:
+      # For WorkloadIdentityFederation auth.
+      # The referred client must have a federated credential for system:serviceaccount:external-dns:external-dns
+      workloadIdentityClientID: ""
+      dnsZoneResourceGroup: ""

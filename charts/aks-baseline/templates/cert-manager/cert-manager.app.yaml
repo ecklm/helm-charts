@@ -1,0 +1,46 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cert-manager
+  namespace: argocd
+  labels:
+    {{- include "aks-baseline.labels" . | nindent 4 }}
+spec:
+  project: default
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: cert-manager
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - RespectIgnoreDifferences=true
+      - ServerSideApply=true
+  ignoreDifferences:
+    - group: admissionregistration.k8s.io
+      kind: ValidatingWebhookConfiguration
+      jqPathExpressions:
+        - .webhooks[].namespaceSelector.matchExpressions
+        - .webhooks[].clientConfig.caBundle
+    - group: admissionregistration.k8s.io
+      kind: MutatingWebhookConfiguration
+      jqPathExpressions:
+        - .webhooks[].namespaceSelector.matchExpressions
+        - .webhooks[].clientConfig.caBundle
+  sources:
+    # - repoURL:
+    #   path: subdir-apps/cert-manager-config
+    #   targetRevision: main
+    - repoURL: https://charts.jetstack.io
+      chart: cert-manager
+      targetRevision: v1.19.4
+      helm:
+        valuesObject:
+          installCRDs: true
+          crds:
+            enabled: true
+          prometheus:
+            enabled: false

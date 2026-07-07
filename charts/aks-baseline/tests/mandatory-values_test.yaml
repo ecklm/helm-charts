@@ -1,0 +1,35 @@
+suite: mandatory values
+templates:
+  - templates/external-dns/external-dns.app.yaml
+tests:
+  - it: fails when mandatory values use empty defaults
+    asserts:
+      - failedTemplate:
+          errorPattern: "/baseDomain.*minLength"
+      - failedTemplate:
+          errorPattern: "/azure/subscriptionID.*minLength"
+      - failedTemplate:
+          errorPattern: "/apps/certManager/azure/dnsZoneResourceGroup.*minLength"
+      - failedTemplate:
+          errorPattern: "/apps/certManager/azure/workloadIdentityClientID.*minLength"
+
+  - it: renders when all mandatory values are provided
+    set:
+      baseDomain: example.com
+      azure.subscriptionID: sub-0000
+      apps.certManager.azure.workloadIdentityClientID: client-0000
+      apps.certManager.azure.dnsZoneResourceGroup: dns-rg
+    asserts:
+      - notFailedTemplate: {}
+      - equal:
+          path: spec.sources[0].helm.valuesObject.txtOwnerId
+          value: example-com
+      - equal:
+          path: spec.sources[0].helm.valuesObject.domainFilters[0]
+          value: example.com
+      - equal:
+          path: spec.sources[0].helm.valuesObject.serviceAccount.annotations["azure.workload.identity/client-id"]
+          value: client-0000
+      - equal:
+          path: spec.sources[0].helm.valuesObject.extraArgs[0]
+          value: --azure-resource-group=dns-rg

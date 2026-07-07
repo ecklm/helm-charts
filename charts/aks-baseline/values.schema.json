@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "baseDomain",
+    "azure",
+    "apps"
+  ],
+  "properties": {
+    "baseDomain": {
+      "type": "string",
+      "minLength": 1
+    },
+    "azure": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "subscriptionID"
+      ],
+      "properties": {
+        "subscriptionID": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "apps": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "certManager"
+      ],
+      "properties": {
+        "certManager": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "azure"
+          ],
+          "properties": {
+            "azure": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "workloadIdentityClientID",
+                "dnsZoneResourceGroup"
+              ],
+              "properties": {
+                "workloadIdentityClientID": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "dnsZoneResourceGroup": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

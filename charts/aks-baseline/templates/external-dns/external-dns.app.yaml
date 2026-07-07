@@ -1,0 +1,58 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: external-dns
+  namespace: argocd
+  labels:
+    {{- include "aks-baseline.labels" . | nindent 4 }}
+spec:
+  project: default
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: external-dns
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+  sources:
+    - repoURL: https://kubernetes-sigs.github.io/external-dns/
+      chart: external-dns
+      targetRevision: 1.20.0
+      helm:
+        releaseName: external-dns
+        valuesObject:
+          logFormat: text
+          podLabels:
+            azure.workload.identity/use: "true"
+
+          sources:
+            - ingress
+            # - service
+
+          provider:
+            name: azure
+          policy: sync
+          registry: txt
+          triggerLoopOnEvent: true
+
+          txtOwnerId: {{ .Values.baseDomain | replace "." "-" | quote }}
+          domainFilters:
+            - {{ .Values.baseDomain | quote}}
+          serviceAccount:
+            annotations:
+              azure.workload.identity/client-id: {{ .Values.apps.certManager.azure.workloadIdentityClientID | quote }}
+          secretConfiguration:
+            enabled: true
+            data:
+              azure.json: |
+                {
+                  "subscriptionId": {{ .Values.azure.subscriptionID | quote}},
+                  "resourceGroup": {{ .Values.apps.certManager.azure.dnsZoneResourceGroup | quote }},
+                  "useWorkloadIdentityExtension":true
+                }
+            mountPath: /etc/kubernetes
+          extraArgs:
+            - --azure-resource-group={{ .Values.apps.certManager.azure.dnsZoneResourceGroup }}
