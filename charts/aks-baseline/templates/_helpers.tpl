@@ -56,11 +56,11 @@ Create configApplication source
 {{- define "aks-baseline.configAppSource" -}}
 {{- with .Values.selfReference }}
 repoURL: {{ .repoURL | quote }}
-chart: {{ .chart | default $.Chart.Name | quote }}
+targetRevision: {{ .targetRevision | default $.Chart.Version | quote }}
 {{- if .path }}
 path: {{ .path | quote }}
 {{- else }}
-targetRevision: {{ .targetRevision | default $.Chart.Version | quote }}
+chart: {{ .chart | default $.Chart.Name | quote }}
 {{- end }}
 {{- end }}
 helm:
