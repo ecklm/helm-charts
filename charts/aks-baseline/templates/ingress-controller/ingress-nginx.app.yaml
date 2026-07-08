@@ -1,3 +1,5 @@
+{{ if not .Values.configApplication }}
+
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
@@ -35,3 +37,5 @@ spec:
                 service.beta.kubernetes.io/azure-load-balancer-health-probe-request-path: /healthz
               targetPorts:
                 https: https
+
+{{ end }}

@@ -51,12 +51,21 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
-Create the name of the service account to use
+Create configApplication source
 */}}
-{{- define "aks-baseline.serviceAccountName" -}}
-{{- if .Values.serviceAccount.create }}
-{{- default (include "aks-baseline.fullname" .) .Values.serviceAccount.name }}
+{{- define "aks-baseline.configAppSource" -}}
+{{- with .Values.selfReference }}
+repoURL: {{ .repoURL | quote }}
+chart: {{ .chart | default $.Chart.Name | quote }}
+{{- if .path }}
+path: {{ .path | quote }}
 {{- else }}
-{{- default "default" .Values.serviceAccount.name }}
+targetRevision: {{ .targetRevision | default $.Chart.Version | quote }}
 {{- end }}
+{{- end }}
+helm:
+  parameters:
+    - name: configApplication
+      value: {{ .Values.configApplication }}
+  valuesObject: {{ .Values | toYaml | nindent 4 }}
 {{- end }}

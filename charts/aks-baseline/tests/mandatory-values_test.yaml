@@ -5,6 +5,8 @@ tests:
   - it: fails when mandatory values use empty defaults
     asserts:
       - failedTemplate:
+          errorPattern: "/selfReference/repoURL.*minLength"
+      - failedTemplate:
           errorPattern: "/baseDomain.*minLength"
       - failedTemplate:
           errorPattern: "/azure/subscriptionID.*minLength"
@@ -17,6 +19,7 @@ tests:
 
   - it: renders when all mandatory values are provided
     set:
+      selfReference.repoURL: oci://example.azurecr.io/helm
       baseDomain: example.com
       azure.subscriptionID: sub-0000
       apps.certManager.letsencryptContactEmail: ops@example.com

@@ -1,0 +1,67 @@
+suite: config application
+templates:
+  - templates/cert-manager/cert-manager.app.yaml
+  - templates/cert-manager/config/letsencrypt.yaml
+  - templates/external-dns/external-dns.app.yaml
+  - templates/ingress-controller/ingress-nginx.app.yaml
+tests:
+  - it: renders cert-manager config when configApplication is cert-manager
+    template: templates/cert-manager/config/letsencrypt.yaml
+    set:
+      selfReference.repoURL: oci://example.azurecr.io/helm
+      configApplication: cert-manager
+      baseDomain: example.com
+      azure.subscriptionID: sub-0000
+      apps.certManager.letsencryptContactEmail: ops@example.com
+      apps.externalDNS.azure.workloadIdentityClientID: client-0000
+      apps.externalDNS.azure.dnsZoneResourceGroup: dns-rg
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: ClusterIssuer
+      - equal:
+          path: metadata.name
+          value: letsencrypt
+
+  - it: does not render cert-manager app when configApplication is cert-manager
+    template: templates/cert-manager/cert-manager.app.yaml
+    set:
+      selfReference.repoURL: oci://example.azurecr.io/helm
+      configApplication: cert-manager
+      baseDomain: example.com
+      azure.subscriptionID: sub-0000
+      apps.certManager.letsencryptContactEmail: ops@example.com
+      apps.externalDNS.azure.workloadIdentityClientID: client-0000
+      apps.externalDNS.azure.dnsZoneResourceGroup: dns-rg
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: does not render external-dns app when configApplication is cert-manager
+    template: templates/external-dns/external-dns.app.yaml
+    set:
+      selfReference.repoURL: oci://example.azurecr.io/helm
+      configApplication: cert-manager
+      baseDomain: example.com
+      azure.subscriptionID: sub-0000
+      apps.certManager.letsencryptContactEmail: ops@example.com
+      apps.externalDNS.azure.workloadIdentityClientID: client-0000
+      apps.externalDNS.azure.dnsZoneResourceGroup: dns-rg
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: does not render ingress-nginx app when configApplication is cert-manager
+    template: templates/ingress-controller/ingress-nginx.app.yaml
+    set:
+      selfReference.repoURL: oci://example.azurecr.io/helm
+      configApplication: cert-manager
+      baseDomain: example.com
+      azure.subscriptionID: sub-0000
+      apps.certManager.letsencryptContactEmail: ops@example.com
+      apps.externalDNS.azure.workloadIdentityClientID: client-0000
+      apps.externalDNS.azure.dnsZoneResourceGroup: dns-rg
+    asserts:
+      - hasDocuments:
+          count: 0

@@ -3,11 +3,38 @@
   "type": "object",
   "additionalProperties": false,
   "required": [
+    "selfReference",
+    "configApplication",
     "baseDomain",
     "azure",
     "apps"
   ],
   "properties": {
+    "selfReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "repoURL"
+      ],
+      "properties": {
+        "repoURL": {
+          "type": "string",
+          "minLength": 1
+        },
+        "chart": {
+          "type": "string"
+        },
+        "targetRevision": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        }
+      }
+    },
+    "configApplication": {
+      "type": "string"
+    },
     "baseDomain": {
       "type": "string",
       "minLength": 1

@@ -1,3 +1,5 @@
+{{ if eq .Values.configApplication "cert-manager" }}
+
 ---
 apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
@@ -6,6 +8,9 @@ metadata:
   namespace: cert-manager
   labels:
     {{- include "aks-baseline.labels" . | nindent 4 }}
+  annotations:
+    argocd.argoproj.io/hook: PostSync
+    argocd.argoproj.io/hook-delete-policy: BeforeHookCreation
 spec:
   acme:
     email: {{ .Values.apps.certManager.letsencryptContactEmail | quote }}
@@ -16,3 +21,5 @@ spec:
       - http01:
           ingress:
             ingressClassName: nginx
+
+{{ end }}

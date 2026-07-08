@@ -1,3 +1,5 @@
+{{ if not .Values.configApplication }}
+
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
@@ -33,9 +35,9 @@ spec:
         - .webhooks[].namespaceSelector.matchExpressions
         - .webhooks[].clientConfig.caBundle
   sources:
-    # - repoURL:
-    #   path: subdir-apps/cert-manager-config
-    #   targetRevision: main
+    - {{- include "aks-baseline.configAppSource"
+        (merge (dict "Values" (dict "configApplication" "cert-manager")) (deepCopy .))
+        | indent 6 }}
     - repoURL: https://charts.jetstack.io
       chart: cert-manager
       targetRevision: v1.19.4
@@ -46,3 +48,5 @@ spec:
             enabled: true
           prometheus:
             enabled: false
+
+{{ end }}

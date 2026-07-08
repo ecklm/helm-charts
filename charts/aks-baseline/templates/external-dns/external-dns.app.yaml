@@ -1,3 +1,5 @@
+{{ if not .Values.configApplication }}
+
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
@@ -58,3 +60,5 @@ spec:
             mountPath: /etc/kubernetes
           extraArgs:
             - --azure-resource-group={{ .Values.apps.externalDNS.azure.dnsZoneResourceGroup }}
+
+{{ end }}

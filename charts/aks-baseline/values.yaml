@@ -1,3 +1,13 @@
+### Internal values. Do not use manually.
+selfReference:
+  repoURL: ""  # Helm registry or git repo  # FIXME: Should default to published chart URL
+  chart: ""  # Defaults to .Chart.Name
+  targetRevision: ""  # Defaults to .Chart.Version
+  path: ""  # If defined, overwrites `chart` and uses source from git repo
+
+configApplication: ""
+
+### External values
 baseDomain: ""
 
 azure:
