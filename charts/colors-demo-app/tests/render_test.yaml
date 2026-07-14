@@ -1,0 +1,11 @@
+suite: render
+templates:
+  - templates/deployment.yaml
+  - templates/service.yaml
+  - templates/ingress.yaml
+tests:
+  - it: renders with minimal values
+    set:
+      ingress.host: colors.example.com
+    asserts:
+      - notFailedTemplate: {}
