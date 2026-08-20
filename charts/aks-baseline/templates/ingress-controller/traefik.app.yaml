@@ -14,7 +14,7 @@ spec:
   project: default
   destination:
     server: https://kubernetes.default.svc
-    namespace: traefik
+    namespace: ingress-controller
   syncPolicy:
     automated:
       prune: true
