@@ -9,3 +9,16 @@ tests:
       ingress.host: colors.example.com
     asserts:
       - notFailedTemplate: {}
+      - equal:
+          path: spec.tls[0].secretName
+          value: blue-tls
+        template: templates/ingress.yaml
+  - it: uses configured TLS secret name
+    set:
+      ingress.host: colors.example.com
+      ingress.tls.secretName: custom-tls
+    asserts:
+      - equal:
+          path: spec.tls[0].secretName
+          value: custom-tls
+        template: templates/ingress.yaml

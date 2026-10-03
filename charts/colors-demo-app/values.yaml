@@ -1,9 +1,13 @@
 ---
 replicaCount: 1
+# Options
+# - red
+# - green
+# - blue
+color: blue
 
 image:
   repository: argoproj/rollouts-demo
-  tag: blue
   pullPolicy: IfNotPresent
 
 nameOverride: ""
@@ -20,7 +24,7 @@ ingress:
   host: ""
   tls:
     enabled: true
-    secretName: colors-tls
+    secretName: ""
 
 resources:
   requests:

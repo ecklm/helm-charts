@@ -4,6 +4,7 @@
   "additionalProperties": false,
   "required": [
     "replicaCount",
+    "color",
     "image",
     "service",
     "ingress",
@@ -14,20 +15,24 @@
       "type": "integer",
       "minimum": 0
     },
+    "color": {
+      "type": "string",
+      "minLength": 1,
+      "enum": [
+        "red",
+        "green",
+        "blue"
+      ]
+    },
     "image": {
       "type": "object",
       "additionalProperties": false,
       "required": [
         "repository",
-        "tag",
         "pullPolicy"
       ],
       "properties": {
         "repository": {
-          "type": "string",
-          "minLength": 1
-        },
-        "tag": {
           "type": "string",
           "minLength": 1
         },
@@ -108,7 +113,8 @@
               "type": "boolean"
             },
             "secretName": {
-              "type": "string"
+              "type": "string",
+              "description": "TLS secret name. When empty, defaults to <color>-tls."
             }
           }
         }

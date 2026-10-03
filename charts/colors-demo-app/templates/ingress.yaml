@@ -18,7 +18,7 @@ spec:
   tls:
     - hosts:
         - {{ .Values.ingress.host | quote }}
-      secretName: {{ .Values.ingress.tls.secretName }}
+      secretName: {{ .Values.ingress.tls.secretName | default (printf "%s-tls" .Values.color) }}
   {{- end }}
   rules:
     - host: {{ .Values.ingress.host | quote }}
